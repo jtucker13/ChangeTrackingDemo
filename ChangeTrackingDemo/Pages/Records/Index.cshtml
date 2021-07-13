@@ -1,0 +1,67 @@
+﻿@page
+@model ChangeTrackingDemo.Pages.Records.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Record[0].AdminID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Record[0].ExternalID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Record[0].Changes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Record[0].ChangeType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Record[0].RecordType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Record[0].ChangeDate)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Record) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdminID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExternalID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Changes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChangeType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecordType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChangeDate)
+            </td>
+            
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.RecordID">Details</a> 
+            
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
