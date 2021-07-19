@@ -1,0 +1,4 @@
+This small project demonstrates methods for tracking changes to various instances of entities stored using EF core.
+Running the project requires applying the migrations via Update-Database in the Nu-Get Package Manager Console.
+Update the data connection string as needed in appsettings.json to allow the project to use an actual database, rerunning Update-Database each time a new connection is used.
+The Admin ID tracking is based on Windows authentication and is only suitable for intranet applications.
