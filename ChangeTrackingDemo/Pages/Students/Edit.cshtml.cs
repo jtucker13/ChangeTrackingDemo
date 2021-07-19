@@ -8,16 +8,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ChangeTrackingDemo.Data;
 using ChangeTrackingDemo.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ChangeTrackingDemo.Pages.Students
 {
     public class EditModel : CustomPageModel
     {
         private readonly ChangeTrackingDemo.Data.ChangeTrackingDemoContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public EditModel(ChangeTrackingDemo.Data.ChangeTrackingDemoContext context)
+        public EditModel(ChangeTrackingDemo.Data.ChangeTrackingDemoContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [BindProperty]
@@ -54,7 +57,7 @@ namespace ChangeTrackingDemo.Pages.Students
             {
                 await _context.SaveChangesAsync();
                 Record audit = new Record();
-                audit.CompareRecords(OldStudent, StudentToUpdate, User.Identity.Name, OldStudent.StudentID);
+                audit.CompareRecords(OldStudent, StudentToUpdate, _httpContextAccessor.HttpContext.User.Identity.Name, id);
                 if(audit.anyChanges)
                 {
                     _context.Record.Add(audit);

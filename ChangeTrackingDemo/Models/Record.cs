@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,12 +20,18 @@ namespace ChangeTrackingDemo.Models
             anyChanges = false;
             ChangeDate = System.DateTime.Now;
         }
+        [Display(Name="Record ID")]
         public int RecordID { get; set; }
+        [Display(Name = "Admin ID")] 
         public string AdminID { get; set; }
+        [Display(Name = "External ID")] 
         public int ExternalID { get; set; }
         public string Changes { get; private set; }
+        [Display(Name = "Change Type")] 
         public ChangeType ChangeType { get; private set; }
+        [Display(Name = "Record Type")] 
         public string RecordType { get; private set; }
+        [Display(Name = "Change Date")] 
         public DateTime ChangeDate { get; private set; }
         public bool anyChanges { get; private set; }
         /// <summary>
@@ -42,6 +49,7 @@ namespace ChangeTrackingDemo.Models
             AdminID = admin;
             ChangeType = ChangeType.Update;
             RecordType = oldEntity.GetType().Name;
+            ExternalID = key;
             var builder = new StringBuilder();
             foreach (var property in oldEntity.GetType().GetProperties())
             {
@@ -67,6 +75,7 @@ namespace ChangeTrackingDemo.Models
             RecordType = newEntity.GetType().Name;
             AdminID = admin;
             ChangeType = ChangeType.Create;
+            ExternalID = key;
             Changes = ($"New {RecordType} created with primary key {key}");
         }
         /// <summary>
@@ -81,7 +90,8 @@ namespace ChangeTrackingDemo.Models
         {
             AdminID = admin;
             ChangeType = ChangeType.Delete;
-            RecordType = oldEntity.GetType().Name; 
+            RecordType = oldEntity.GetType().Name;
+            ExternalID = key;
             var builder = new StringBuilder();
             builder.AppendLine($"{RecordType} with primary key {key} deleted");
             foreach (var property in oldEntity.GetType().GetProperties())

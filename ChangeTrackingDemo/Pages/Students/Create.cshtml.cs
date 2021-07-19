@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ChangeTrackingDemo.Data;
 using ChangeTrackingDemo.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ChangeTrackingDemo.Pages.Students
 {
     public class CreateModel : PageModel
     {
         private readonly ChangeTrackingDemo.Data.ChangeTrackingDemoContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CreateModel(ChangeTrackingDemo.Data.ChangeTrackingDemoContext context)
+        public CreateModel(ChangeTrackingDemo.Data.ChangeTrackingDemoContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult OnGet()
@@ -41,7 +45,7 @@ namespace ChangeTrackingDemo.Pages.Students
             _context.Student.Add(Student);
             await _context.SaveChangesAsync();
             Record audit = new Record();
-            audit.NewRecord(User.Identity.Name, Student, Student.StudentID);
+            audit.NewRecord(_httpContextAccessor.HttpContext.User.Identity.Name, Student, Student.StudentID);
             _context.Record.Add(audit);
             await _context.SaveChangesAsync();
             return RedirectToPage("./Index");

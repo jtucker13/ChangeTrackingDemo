@@ -7,18 +7,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ChangeTrackingDemo.Data;
 using ChangeTrackingDemo.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ChangeTrackingDemo.Pages.Students
 {
     public class DeleteModel : PageModel
     {
         private readonly ChangeTrackingDemo.Data.ChangeTrackingDemoContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DeleteModel(ChangeTrackingDemo.Data.ChangeTrackingDemoContext context)
+        public DeleteModel(ChangeTrackingDemo.Data.ChangeTrackingDemoContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
-
         [BindProperty]
         public Student Student { get; set; }
 
@@ -51,7 +53,7 @@ namespace ChangeTrackingDemo.Pages.Students
             if (Student != null)
             {
                 Record audit = new Record();
-                audit.DeleteRecord(Student, User.Identity.Name, Student.StudentID);
+                audit.DeleteRecord(Student, _httpContextAccessor.HttpContext.User.Identity.Name, Student.StudentID);
                 _context.Record.Add(audit);
                 _context.Student.Remove(Student);
                 await _context.SaveChangesAsync();
